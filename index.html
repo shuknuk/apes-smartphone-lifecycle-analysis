@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smartphone Life Cycle Analysis</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 10px;
+            font-size: 2.5em;
+        }
+        
+        .subtitle {
+            text-align: center;
+            color: #7f8c8d;
+            margin-bottom: 30px;
+            font-size: 1.2em;
+        }
+        
+        .flowchart {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+        }
+        
+        .stage {
+            background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 800px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .stage:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+        }
+        
+        .stage:nth-child(2n) {
+            background: linear-gradient(135deg, #4ecdc4, #44a08d);
+        }
+        
+        .stage:nth-child(3n) {
+            background: linear-gradient(135deg, #ffecd2, #fcb69f);
+            color: #2c3e50;
+        }
+        
+        .stage:nth-child(4n) {
+            background: linear-gradient(135deg, #a8edea, #fed6e3);
+            color: #2c3e50;
+        }
+        
+        .stage:nth-child(5n) {
+            background: linear-gradient(135deg, #ff9a9e, #fecfef);
+            color: #2c3e50;
+        }
+        
+        .stage:nth-child(6n) {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+        }
+        
+        .stage:nth-child(7n) {
+            background: linear-gradient(135deg, #f093fb, #f5576c);
+        }
+        
+        .stage:nth-child(8n) {
+            background: linear-gradient(135deg, #4facfe, #00f2fe);
+            color: #2c3e50;
+        }
+        
+        .stage::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+        
+        .stage:hover::before {
+            left: 100%;
+        }
+        
+        .stage-header {
+            font-size: 1.4em;
+            font-weight: bold;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .stage-number {
+            background: rgba(255,255,255,0.3);
+            border-radius: 50%;
+            width: 35px;
+            height: 35px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+        
+        .stage-content {
+            line-height: 1.6;
+        }
+        
+        .environmental-impact {
+            background: rgba(255,255,255,0.15);
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 15px;
+            border-left: 4px solid rgba(255,255,255,0.5);
+        }
+        
+        .environmental-impact h4 {
+            margin: 0 0 10px 0;
+            font-size: 1.1em;
+        }
+        
+        .arrow {
+            font-size: 2em;
+            color: #3498db;
+            animation: bounce 2s infinite;
+        }
+        
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateY(0);
+            }
+            40% {
+                transform: translateY(-10px);
+            }
+            60% {
+                transform: translateY(-5px);
+            }
+        }
+        
+        .summary {
+            background: linear-gradient(135deg, #2c3e50, #34495e);
+            color: white;
+            padding: 25px;
+            border-radius: 15px;
+            margin-top: 30px;
+            text-align: center;
+        }
+        
+        .summary h3 {
+            margin-bottom: 15px;
+            font-size: 1.5em;
+        }
+        
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .stat {
+            background: rgba(255,255,255,0.1);
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 1.8em;
+            font-weight: bold;
+            color: #3498db;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+            
+            .stage {
+                width: 95%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📱 Smartphone Life Cycle Analysis</h1>
+        <p class="subtitle">From Cradle to Grave: Environmental Impact of Our Most Essential Device</p>
+        
+        <div class="flowchart">
+            <div class="stage">
+                <div class="stage-header">
+                    <div class="stage-number">1</div>
+                    Raw Material Extraction & Mining
+                </div>
+                <div class="stage-content">
+                    <p><strong>Process:</strong> Mining of rare earth elements, precious metals (gold, silver, platinum), lithium, cobalt, copper, aluminum, and silicon from various global locations.</p>
+                    
+                    <div class="environmental-impact">
+                        <h4>🌍 Environmental & Human Impacts:</h4>
+                        <ul>
+                            <li><strong>Environmental:</strong> Massive habitat destruction, water contamination from toxic chemicals, soil degradation, CO₂ emissions from heavy machinery, and air pollution</li>
+                            <li><strong>Human:</strong> Dangerous working conditions in mines, child labor (especially in cobalt mines in Congo), respiratory health issues, displacement of local communities</li>
+                            <li><strong>Water Usage:</strong> 1 smartphone requires ~13,000 liters of water for mining operations</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="arrow">⬇️</div>
+            
+            <div class="stage">
+                <div class="stage-header">
+                    <div class="stage-number">2</div>
+                    Transportation of Raw Materials
+                </div>
+                <div class="stage-content">
+                    <p><strong>Process:</strong> Raw materials shipped via cargo ships, trucks, and planes from mining locations to processing facilities and component manufacturers worldwide.</p>
+                    
+                    <div class="environmental-impact">
+                        <h4>🌍 Environmental & Human Impacts:</h4>
+                        <ul>
+                            <li><strong>Environmental:</strong> High CO₂ emissions from cargo ships and aircraft, fuel consumption, potential oil spills, air pollution in port cities</li>
+                            <li><strong>Human:</strong> Air quality degradation in shipping routes, noise pollution affecting communities near transportation hubs</li>
+                            <li><strong>Energy:</strong> Transportation accounts for ~7% of smartphone's total carbon footprint</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="arrow">⬇️</div>
+            
+            <div class="stage">
+                <div class="stage-header">
+                    <div class="stage-number">3</div>
+                    Component Manufacturing
+                </div>
+                <div class="stage-content">
+                    <p><strong>Process:</strong> Production of semiconductors, processors, memory chips, screens, batteries, cameras, and other components in specialized factories (primarily in Asia).</p>
+                    
+                    <div class="environmental-impact">
+                        <h4>🌍 Environmental & Human Impacts:</h4>
+                        <ul>
+                            <li><strong>Environmental:</strong> Extremely high energy consumption (semiconductor fabs use as much energy as small cities), toxic chemical waste, massive water usage for chip cleaning</li>
+                            <li><strong>Human:</strong> Exposure to hazardous chemicals, repetitive strain injuries, long working hours, air pollution affecting factory workers and nearby communities</li>
+                            <li><strong>Energy:</strong> Manufacturing accounts for ~85% of smartphone's lifetime carbon footprint</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="arrow">⬇️</div>
+            
+            <div class="stage">
+                <div class="stage-header">
+                    <div class="stage-number">4</div>
+                    Assembly & Final Manufacturing
+                </div>
+                <div class="stage-content">
+                    <p><strong>Process:</strong> Components assembled into final smartphones in large-scale factories, quality testing, software installation, and packaging preparation.</p>
+                    
+                    <div class="environmental-impact">
+                        <h4>🌍 Environmental & Human Impacts:</h4>
+                        <ul>
+                            <li><strong>Environmental:</strong> Energy-intensive assembly processes, electronic waste from defective units, packaging material production (plastic, cardboard)</li>
+                            <li><strong>Human:</strong> Factory worker health issues from fine particulate exposure, repetitive motion injuries, stress from high-speed production demands</li>
+                            <li><strong>Waste:</strong> ~3-5% of units fail quality control, creating immediate e-waste</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="arrow">⬇️</div>
+            
+            <div class="stage">
+                <div class="stage-header">
+                    <div class="stage-number">5</div>
+                    Packaging & Distribution Preparation
+                </div>
+                <div class="stage-content">
+                    <p><strong>Process:</strong> Smartphones packaged with accessories (chargers, cables, earphones), user manuals, and protective packaging materials for shipping.</p>
+                    
+                    <div class="environmental-impact">
+                        <h4>🌍 Environmental & Human Impacts:</h4>
+                        <ul>
+                            <li><strong>Environmental:</strong> Plastic production for packaging, paper production for manuals, additional electronic accessories manufacturing</li>
+                            <li><strong>Human:</strong> Chemical exposure in plastic production facilities, deforestation impacts on indigenous communities</li>
+                            <li><strong>Waste:</strong> Most packaging is discarded immediately after unboxing</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="arrow">⬇️</div>
+            
+            <div class="stage">
+                <div class="stage-header">
+                    <div class="stage-number">6</div>
+                    Global Distribution & Transportation
+                </div>
+                <div class="stage-content">
+                    <p><strong>Process:</strong> Finished smartphones shipped globally via cargo ships, trucks, and planes to distribution centers, retailers, and directly to consumers.</p>
+                    
+                    <div class="environmental-impact">
+                        <h4>🌍 Environmental & Human Impacts:</h4>
+                        <ul>
+                            <li><strong>Environmental:</strong> Significant CO₂ emissions from international shipping, fuel consumption, refrigerated transport for battery preservation</li>
+                            <li><strong>Human:</strong> Air pollution in major shipping lanes and ports, traffic congestion from delivery trucks in urban areas</li>
+                            <li><strong>Scale:</strong> Over 1.4 billion smartphones shipped globally each year</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="arrow">⬇️</div>
+            
+            <div class="stage">
+                <div class="stage-header">
+                    <div class="stage-number">7</div>
+                    Retail & Consumer Purchase
+                </div>
+                <div class="stage-content">
+                    <p><strong>Process:</strong> Smartphones sold through retail stores, online platforms, and carrier stores, with additional accessories and service plans.</p>
+                    
+                    <div class="environmental-impact">
+                        <h4>🌍 Environmental & Human Impacts:</h4>
+                        <ul>
+                            <li><strong>Environmental:</strong> Energy consumption in retail stores (lighting, climate control, displays), additional packaging for shipping to consumers</li>
+                            <li><strong>Human:</strong> Consumer pressure to upgrade frequently, contributing to overconsumption culture</li>
+                            <li><strong>Economics:</strong> Average smartphone replacement cycle is now 2-3 years</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="arrow">⬇️</div>
+            
+            <div class="stage">
+                <div class="stage-header">
+                    <div class="stage-number">8</div>
+                    Consumer Use Phase
+                </div>
+                <div class="stage-content">
+                    <p><strong>Process:</strong> Daily smartphone usage including charging, data transmission, app usage, and regular interaction with cellular and WiFi networks.</p>
+                    
+                    <div class="environmental-impact">
+                        <h4>🌍 Environmental & Human Impacts:</h4>
+                        <ul>
+                            <li><strong>Environmental:</strong> Daily charging energy consumption, data center energy for cloud services and apps, cellular tower operation</li>
+                            <li><strong>Human:</strong> Electromagnetic radiation exposure, potential addiction and mental health impacts, sleep disruption from blue light</li>
+                            <li><strong>Energy:</strong> Annual charging uses ~3-5 kWh of electricity per device</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="arrow">⬇️</div>
+            
+            <div class="stage">
+                <div class="stage-header">
+                    <div class="stage-number">9</div>
+                    End of Life & Disposal
+                </div>
+                <div class="stage-content">
+                    <p><strong>Process:</strong> When smartphones break or become obsolete, they're either recycled, refurbished, stored in drawers, or improperly disposed of in regular waste.</p>
+                    
+                    <div class="environmental-impact">
+                        <h4>🌍 Environmental & Human Impacts:</h4>
+                        <ul>
+                            <li><strong>Environmental:</strong> E-waste contains toxic materials (lead, mercury, cadmium) that leach into soil and groundwater, valuable materials lost to landfills</li>
+                            <li><strong>Human:</strong> Informal e-waste recycling exposes workers to toxic fumes and chemicals, especially in developing countries</li>
+                            <li><strong>Scale:</strong> Only ~20% of smartphones are properly recycled globally</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="summary">
+            <h3>📊 Overall Environmental Impact Summary</h3>
+            <p>The complete lifecycle of a single smartphone has profound environmental and social consequences that extend far beyond what most consumers realize.</p>
+            
+            <div class="stats">
+                <div class="stat">
+                    <div class="stat-number">70kg</div>
+                    <div>CO₂ equivalent emissions per device</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number">13,000L</div>
+                    <div>Water used in production</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number">60+</div>
+                    <div>Different elements used</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number">1.4B</div>
+                    <div>Units produced annually</div>
+                </div>
+            </div>
+            
+            <p style="margin-top: 20px;"><strong>Key Takeaway:</strong> The manufacturing phase accounts for 85% of a smartphone's lifetime environmental impact, highlighting the importance of using devices longer and supporting right-to-repair initiatives.</p>
+        </div>
+    </div>
+</body>
+</html>
